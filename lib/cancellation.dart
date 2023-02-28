@@ -1,6 +1,8 @@
-/// Support for doing something awesome.
+/// Propagate cancellation requests to cancellable operations
 ///
-/// More dartdocs go here.
+/// Cancellation request can be observed by polling the
+/// [CancellationToken.isCancellationRequested] property or by subscribing a
+/// [CancellationCallback] with [CancellationToken.onCancelled].
 library cancellation;
 
 export 'src/cancellation/token.dart';

@@ -3,6 +3,24 @@ import 'dart:async';
 import 'package:cancellation/cancellation.dart';
 
 extension StreamAwaiter<T> on Stream<T> {
+  /// Wait for specific values to be emitted from the stream
+  ///
+  /// Returns a future that completes when a value emitted by the stream matches
+  /// [matchTrue] or [matchFalse]. If the stream is closed before a matching value
+  /// is emitted, the future completes with false.
+  ///
+  /// If [initialValue] is given and is matched by [matchTrue] or [matchFalse],
+  /// the future is immediately completed.
+  ///
+  /// If the stream emits an error and [throwOnError] is set to true, the future
+  /// is completed with the same error. If [cancelOnError] is set instead (default),
+  /// the future is completed with false. I.e. [throwOnError] takes precedence
+  /// over [cancelOnError]. If neither [throwOnError] nor [cancelOnError] is
+  /// true, the error is ignored.
+  ///
+  /// If [ct] is cancelled, and [throwOnCancel] is set true, the future is
+  /// completed with a [CancelledException]. If [throwOnCancel] is false (default),
+  /// the future completes with false.
   Future<bool> awaitWhere(
           {final T? initialValue,
           final bool Function(T) matchTrue = neverMatch,
@@ -19,6 +37,24 @@ extension StreamAwaiter<T> on Stream<T> {
           throwOnCancel: throwOnCancel,
           ct: ct);
 
+  /// Wait for a specific value to be emitted from the stream
+  ///
+  /// Returns a future that completes when a value emitted by the stream equals
+  /// [awaitedValue] or [cancelValue]. If the stream is closed before a matching value
+  /// is emitted, the future completes with false.
+  ///
+  /// If [initialValue] is given and equals [awaitedValue] or [cancelValue],
+  /// the future is immediately completed.
+  ///
+  /// If the stream emits an error and [throwOnError] is set to true, the future
+  /// is completed with the same error. If [cancelOnError] is set instead (default),
+  /// the future is completed with false. I.e. [throwOnError] takes precedence
+  /// over [cancelOnError]. If neither [throwOnError] nor [cancelOnError] is
+  /// true, the error is ignored.
+  ///
+  /// If [ct] is cancelled, and [throwOnCancel] is set true, the future is
+  /// completed with a [CancelledException]. If [throwOnCancel] is false (default),
+  /// the future completes with false.
   Future<bool> awaitValue(final T awaitedValue,
           {final T? initialValue,
           final T? cancelValue,
@@ -124,6 +160,24 @@ Future<bool> awaitStreamWhere<T>(final Stream<T> stream,
   return completer.future;
 }
 
+/// Wait for a specific value to be emitted from a stream
+///
+/// Returns a future that completes when a value emitted by [stream] equals
+/// [awaitedValue] or [cancelValue]. If [stream] is closed before a matching value
+/// is emitted, the future completes with false.
+///
+/// If [initialValue] is given and equals [awaitedValue] or [cancelValue],
+/// the future is immediately completed.
+///
+/// If [stream] emits an error and [throwOnError] is set to true, the future
+/// is completed with the same error. If [cancelOnError] is set instead (default),
+/// the future is completed with false. I.e. [throwOnError] takes precedence
+/// over [cancelOnError]. If neither [throwOnError] nor [cancelOnError] is
+/// true, the error is ignored.
+///
+/// If [ct] is cancelled, and [throwOnCancel] is set true, the future is
+/// completed with a [CancelledException]. If [throwOnCancel] is false (default),
+/// the future completes with false.
 Future<bool> awaitStreamValue<T>(final Stream<T> stream, final T awaitedValue,
         {final T? initialValue,
         final T? cancelValue,
@@ -142,4 +196,5 @@ Future<bool> awaitStreamValue<T>(final Stream<T> stream, final T awaitedValue,
         throwOnCancel: throwOnCancel,
         ct: ct);
 
+/// A const matcher that matches nothing (always returns false)
 bool neverMatch(dynamic value) => false;
