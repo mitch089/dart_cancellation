@@ -1,0 +1,14 @@
+name: cancellation
+description: Support for cancellable operations in Dart
+version: 0.0.1
+repository: https://github.com/mitch089/dart_cancellation.git
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+# dependencies:
+#   path: ^1.8.0
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
