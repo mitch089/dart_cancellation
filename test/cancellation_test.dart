@@ -6,14 +6,20 @@ void main() {
     final cts = CancellationTokenSource();
     final ct = cts.token;
 
-    int counter = 0;
-    ct.onCancelled(() => counter++);
-    ct.onCancelled(() => counter++);
-    final s3 = ct.onCancelled(() => counter++);
+    int counter1 = 0;
+    int counter2 = 0;
+    int counter3 = 0;
+
+    ct.onCancelled(() => counter1++);
+    ct.onCancelled(() => counter2++);
+    final s3 = ct.onCancelled(() => counter3++);
 
     expect(ct.isCancellationRequested, isFalse);
     expect(ct.canBeCancelled, isTrue);
-    expect(counter, isZero);
+
+    expect(counter1, isZero);
+    expect(counter2, isZero);
+    expect(counter3, isZero);
 
     s3.cancel();
 
@@ -21,6 +27,9 @@ void main() {
 
     expect(ct.isCancellationRequested, isTrue);
     expect(ct.canBeCancelled, isTrue);
-    expect(counter, equals(2));
+
+    expect(counter1, equals(1));
+    expect(counter2, equals(1));
+    expect(counter3, equals(0));
   });
 }
